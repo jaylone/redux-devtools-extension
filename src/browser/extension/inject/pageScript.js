@@ -1,6 +1,6 @@
 import { getActionsArray, evalAction } from 'remotedev-utils';
 import createStore from '../../../app/store/createStore';
-import configureStore from '../../../app/store/configureStore';
+import configureStore, { getUrlParam } from '../../../app/store/configureStore';
 import { isAllowed } from '../options/syncOptions';
 import Monitor from '../../../app/service/Monitor';
 import { getLocalFilter, isFiltered, filterState } from '../../../app/api/filters';
@@ -112,6 +112,12 @@ window.devToolsExtension = function(reducer, preloadedState, config) {
       }
       return true;
     });
+
+    const report = getUrlParam('remotedev_report');
+    if (report) {
+      openWindow();
+      setTimeout(() => { relay('GET_REPORT', report); }, 0);
+    }
 
     relay('INIT_INSTANCE');
   }
